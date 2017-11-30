@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Avaliacao</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+    </head>
+    <body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="panel panel-default">
+						<div class="panel-heading">Dashboard</div>
+						<div class="panel-body">
+							<form action="" method="POST" id="formulario">
+							<div class="form-group">
+							<label class="col-form-label" for="formGroupExampleInput">Nome</label>
+							<input type="text" class="form-control" id="nome" placeholder="*Nome..." required="required">
+							</div>
+							<div class="form-group">
+							<button type="submit" class="btn btn-primary" id="consulta">Consultar</button>
+							</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Id do Cliente</th>
+      <th>Nome do Cliente</th>
+      <th>Idade</th>
+      <th>Telefone</th>
+      <th>Endereço</th>
+      <th>Categoria</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+  </tbody>
+</table>
+        <script src="js/jquery.min.js"></script>
+    	<script >
+			$(document).ready(function(e){
+               $("#formulario").submit(function(e){
+                   /** Previne o envio do formulário */
+                   e.preventDefault();
+
+                   /** Pega o valor do input */
+                   var nome = $("#nome").val();
+
+                   /** Requisita via Ajax */
+                   $.ajax({
+                       url : "../controller/clientes_curl.php",
+                       type : "POST",
+                       dataType : "json",
+                       data : {"nome" : nome}
+                   }).done(function(data){
+
+                       /** Gera HTML */
+                       var HTML = "";
+                       $.each(data, function(i, item){
+                           HTML += "<tr>";
+                           HTML += "<td>" + item.id_cliente + "</td>";
+                           HTML += "<td>" + item.nome  + "</td>";
+                           HTML += "<td>" + item.idade  + "</td>";
+                           HTML += "<td>" + item.telefone  + "</td>";
+                           HTML += "<td>" + item.endereco + "</td>";
+                           HTML += "<td>" + item.cat_nome + "</td>";
+                           HTML += "</tr>";
+                       });
+                       
+                       /** Limpa e adiciona linhas na tabela */
+                       $("tbody").empty();
+                       $("tbody").append(HTML);
+                   });
+               });
+           });
+		</script>
+    </body>
+</html>
